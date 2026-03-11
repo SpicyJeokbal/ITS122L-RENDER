@@ -14,7 +14,7 @@ const Scouts = () => {
   const fetchScouts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users/scouts', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/users/scouts', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

@@ -31,7 +31,7 @@ const AdminManagement = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/admin/users', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -67,8 +67,8 @@ const AdminManagement = () => {
     try {
       const token = localStorage.getItem('token');
       const url = selectedUser 
-        ? `http://localhost:5000/api/admin/users/${selectedUser.id}`
-        : 'http://localhost:5000/api/admin/users';
+        ? `${process.env.REACT_APP_API_URL}/api/admin/users/${selectedUser.id}`
+        : '${process.env.REACT_APP_API_URL}/api/admin/users';
       
       const method = selectedUser ? 'PUT' : 'POST';
       
@@ -103,7 +103,7 @@ const AdminManagement = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const AdminManagement = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -185,7 +185,7 @@ const AdminManagement = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${passwordResetUser.id}/reset-password`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users/${passwordResetUser.id}/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

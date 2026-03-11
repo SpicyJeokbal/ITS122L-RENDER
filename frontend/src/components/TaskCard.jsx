@@ -21,7 +21,7 @@ const TaskCard = ({ task, onDragStart, onClick, onDelete, onArchive }) => {
   const handleDownloadPDF = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${task.id}/pdf`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${task.id}/pdf`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

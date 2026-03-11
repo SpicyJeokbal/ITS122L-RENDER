@@ -1,7 +1,6 @@
 // frontend/src/pages/Archive.jsx
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/NavBar';
-import KanbanBoard from '../components/KanbanBoard.jsx';
 import '../index.css';
 
 const Archive = () => {

@@ -1,9 +1,10 @@
 // frontend/src/pages/Workspace.jsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/NavBar';
-import KanbanBoard from '../components/KanbanBoard.jsx';
+import KanbanBoard from '../components/KanbanBoard';
 import TaskForm from '../components/TaskForm';
 import '../index.css';
+
 
 const Workspace = () => {
   const [tasks, setTasks] = useState({

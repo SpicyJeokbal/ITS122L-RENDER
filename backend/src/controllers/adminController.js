@@ -1,6 +1,7 @@
 // backend/src/controllers/adminController.js
 const { createClient } = require('@supabase/supabase-js');
 const bcrypt = require('bcryptjs');
+const { logActivity } = require('./logsController');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 // Get all users (Super Admin only)
@@ -127,6 +128,18 @@ exports.createUser = async (req, res) => {
 
     if (error) throw error;
 
+    // Log user creation
+    await logActivity(
+      req.user.id,
+      `${req.user.first_name} ${req.user.last_name}`,
+      'create_user',
+      'user',
+      user.id,
+      `${first_name} ${last_name}`,
+      { email, role },
+      req.ip
+    );
+
     res.status(201).json({
       success: true,
       message: 'User created successfully',
@@ -173,6 +186,18 @@ exports.updateUser = async (req, res) => {
 
     if (error) throw error;
 
+    // Log user update
+    await logActivity(
+      req.user.id,
+      `${req.user.first_name} ${req.user.last_name}`,
+      'update_user',
+      'user',
+      id,
+      `${user.first_name} ${user.last_name}`,
+      { changes: updateData },
+      req.ip
+    );
+
     res.json({
       success: true,
       message: 'User updated successfully',
@@ -217,6 +242,18 @@ exports.updateUserPermissions = async (req, res) => {
       .single();
 
     if (error) throw error;
+
+    // Log permission update
+    await logActivity(
+      req.user.id,
+      `${req.user.first_name} ${req.user.last_name}`,
+      'update_permissions',
+      'user',
+      id,
+      `${user.first_name} ${user.last_name}`,
+      { permissions },
+      req.ip
+    );
 
     res.json({
       success: true,
@@ -263,6 +300,18 @@ exports.deactivateUser = async (req, res) => {
 
     if (error) throw error;
 
+    // Log deactivation
+    await logActivity(
+      req.user.id,
+      `${req.user.first_name} ${req.user.last_name}`,
+      'deactivate_user',
+      'user',
+      id,
+      `${user.first_name} ${user.last_name}`,
+      { email: user.email },
+      req.ip
+    );
+
     res.json({
       success: true,
       message: 'User deactivated successfully',
@@ -299,12 +348,33 @@ exports.deleteUser = async (req, res) => {
       });
     }
 
+    // Get user details before deleting
+    const { data: userToDelete } = await supabase
+      .from('users')
+      .select('first_name, last_name, email, role')
+      .eq('id', id)
+      .single();
+
     const { error } = await supabase
       .from('users')
       .delete()
       .eq('id', id);
 
     if (error) throw error;
+
+    // Log deletion
+    if (userToDelete) {
+      await logActivity(
+        req.user.id,
+        `${req.user.first_name} ${req.user.last_name}`,
+        'delete_user',
+        'user',
+        id,
+        `${userToDelete.first_name} ${userToDelete.last_name}`,
+        { email: userToDelete.email, role: userToDelete.role },
+        req.ip
+      );
+    }
 
     res.json({
       success: true,
@@ -341,6 +411,13 @@ exports.resetUserPassword = async (req, res) => {
       });
     }
 
+    // Get user details
+    const { data: userToUpdate } = await supabase
+      .from('users')
+      .select('first_name, last_name, email')
+      .eq('id', id)
+      .single();
+
     // Hash new password
     const password_hash = await bcrypt.hash(new_password, 10);
 
@@ -350,6 +427,20 @@ exports.resetUserPassword = async (req, res) => {
       .eq('id', id);
 
     if (error) throw error;
+
+    // Log password reset
+    if (userToUpdate) {
+      await logActivity(
+        req.user.id,
+        `${req.user.first_name} ${req.user.last_name}`,
+        'reset_password',
+        'user',
+        id,
+        `${userToUpdate.first_name} ${userToUpdate.last_name}`,
+        null,
+        req.ip
+      );
+    }
 
     res.json({
       success: true,

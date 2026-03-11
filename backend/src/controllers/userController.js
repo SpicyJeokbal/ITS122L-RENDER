@@ -2,21 +2,12 @@
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Get all users (only for leaders and admins)
+// Get all users
 exports.getUsers = async (req, res) => {
   try {
-    // Only allow leaders, admins, and super_admins to view all users
-    if (!['leader', 'admin', 'super_admin'].includes(req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: 'Access denied. Leaders and above only.'
-      });
-    }
-
     const { data: users, error } = await supabase
       .from('users')
       .select('id, email, first_name, last_name, role, created_at')
-      .eq('is_active', true)
       .order('first_name', { ascending: true });
 
     if (error) throw error;
@@ -35,27 +26,38 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-// Get all scouts (users with role 'scout')
+// Get all scouts (all users who can be assigned tasks)
 exports.getScouts = async (req, res) => {
   try {
-    const { data: scouts, error } = await supabase
+    const { data: users, error } = await supabase
       .from('users')
-      .select('id, email, first_name, last_name, created_at')
-      .eq('role', 'scout')
-      .eq('is_active', true)
+      .select('id, email, first_name, last_name, role, created_at')
       .order('first_name', { ascending: true });
 
     if (error) throw error;
 
+    console.log('Fetched users from DB:', users); // Debug log
+
+    // Format users data - include all users (scouts, leaders, admins)
+    const formattedUsers = users.map(user => ({
+      id: user.id,
+      name: `${user.first_name} ${user.last_name}`, // Combine first and last name
+      email: user.email,
+      role: user.role,
+      created_at: user.created_at
+    }));
+
+    console.log('Formatted users with names:', formattedUsers); // Debug log
+
     res.json({
       success: true,
-      scouts
+      scouts: formattedUsers // Keep the key as 'scouts' for backward compatibility
     });
   } catch (error) {
-    console.error('Error fetching scouts:', error);
+    console.error('Error fetching users:', error);
     res.status(500).json({
       success: false,
-      message: 'Error fetching scouts',
+      message: 'Error fetching users',
       error: error.message
     });
   }
@@ -88,7 +90,7 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// Update user profile (users can only update their own profile)
+// Update user profile
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.id;

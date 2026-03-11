@@ -2,6 +2,7 @@
 const { createClient } = require('@supabase/supabase-js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { logActivity } = require('./logsController');
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
@@ -51,6 +52,18 @@ exports.register = async (req, res) => {
       .single();
 
     if (error) throw error;
+
+    // Log registration activity
+    await logActivity(
+      user.id,
+      `${user.first_name} ${user.last_name}`,
+      'register',
+      'user',
+      user.id,
+      `${user.first_name} ${user.last_name}`,
+      { email: user.email, role: user.role },
+      req.ip
+    );
 
     // Generate JWT token
     const token = jwt.sign(
@@ -118,6 +131,18 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Log login activity
+    await logActivity(
+      user.id,
+      `${user.first_name} ${user.last_name}`,
+      'login',
+      'system',
+      null,
+      null,
+      { email: user.email, role: user.role },
+      req.ip
+    );
+
     // Generate JWT token
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
@@ -147,10 +172,33 @@ exports.login = async (req, res) => {
   }
 };
 
-// Logout user (client-side handles token removal)
+// Logout user
 exports.logout = async (req, res) => {
-  res.json({
-    success: true,
-    message: 'Logout successful'
-  });
+  try {
+    // Log logout activity
+    if (req.user) {
+      await logActivity(
+        req.user.id,
+        `${req.user.first_name} ${req.user.last_name}`,
+        'logout',
+        'system',
+        null,
+        null,
+        null,
+        req.ip
+      );
+    }
+
+    res.json({
+      success: true,
+      message: 'Logout successful'
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error logging out',
+      error: error.message
+    });
+  }
 };

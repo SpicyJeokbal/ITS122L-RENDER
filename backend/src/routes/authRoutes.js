@@ -2,14 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const { authenticateToken } = require('../middleware/auth');
 
-// Register new user
+// Public routes
 router.post('/register', authController.register);
-
-// Login user
 router.post('/login', authController.login);
 
-// Logout user
-router.post('/logout', authController.logout);
+// Protected route - logout requires authentication to log who logged out
+router.post('/logout', authenticateToken, authController.logout);
 
 module.exports = router;

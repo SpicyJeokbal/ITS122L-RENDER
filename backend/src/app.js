@@ -10,7 +10,8 @@ const taskRoutes = require('./routes/taskRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 const archiveRoutes = require('./routes/archiveRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
+const historyRoutes = require('./routes/historyRoutes');
+const logsRoutes = require('./routes/logsRoutes');
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/archive', archiveRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/history', historyRoutes);
+app.use('/api/logs', logsRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

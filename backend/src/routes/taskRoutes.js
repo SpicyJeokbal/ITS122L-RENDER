@@ -22,6 +22,12 @@ router.put('/:id', taskController.updateTask);
 // Update task status (for drag and drop)
 router.post('/update-status', taskController.updateTaskStatus);
 
+// Archive task manually
+router.post('/:id/archive', taskController.archiveTask);
+
+// Generate PDF for task
+router.get('/:id/pdf', taskController.generateTaskPDF);
+
 // Delete task
 router.delete('/:id', taskController.deleteTask);
 

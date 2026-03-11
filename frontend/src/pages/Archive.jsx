@@ -1,7 +1,7 @@
 // frontend/src/pages/Archive.jsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/NavBar';
-import KanbanBoard from '../components/KanBanBoard';
+import KanbanBoard from '../components/KanbanBoard';
 import '../index.css';
 
 const Archive = () => {
@@ -84,7 +84,7 @@ const Archive = () => {
           </div>
         ) : archivedTasks.length === 0 ? (
           <div style={{ padding: '50px', textAlign: 'center' }}>
-            <h2>📦 No archived tasks</h2>
+            <h2>No archived tasks</h2>
             <p>Completed tasks will appear here after 30 days</p>
           </div>
         ) : (

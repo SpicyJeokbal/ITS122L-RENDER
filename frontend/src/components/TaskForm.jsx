@@ -15,6 +15,11 @@ const TaskForm = ({ task, status, scouts, onClose, onSubmit }) => {
 
   const [isReadOnly, setIsReadOnly] = useState(false);
 
+  // Debug: Log scouts data
+  useEffect(() => {
+    console.log('Scouts data:', scouts);
+  }, [scouts]);
+
   useEffect(() => {
     if (task) {
       // View mode - populate with task data
@@ -69,8 +74,11 @@ const TaskForm = ({ task, status, scouts, onClose, onSubmit }) => {
   };
 
   const getAssignedScoutName = () => {
+    if (!formData.assigned_to) {
+      return 'Entire Organization';
+    }
     const scout = scouts.find(s => s.id === formData.assigned_to);
-    return scout ? scout.name : '-';
+    return scout ? scout.name : 'Entire Organization';
   };
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -118,7 +126,10 @@ const TaskForm = ({ task, status, scouts, onClose, onSubmit }) => {
 
               <div className="form-row-inline">
                 <div className="form-group">
-                  <label htmlFor="assigned_to">ASSIGNED TO:</label>
+                  <label htmlFor="assigned_to">
+                    ASSIGNED TO:
+                    <span style={{ fontSize: '10px', color: '#999', marginLeft: '5px' }}>(Optional)</span>
+                  </label>
                   <select 
                     id="assigned_to" 
                     name="assigned_to"
@@ -126,9 +137,8 @@ const TaskForm = ({ task, status, scouts, onClose, onSubmit }) => {
                     value={formData.assigned_to}
                     onChange={handleChange}
                     disabled={isReadOnly}
-                    required
                   >
-                    <option value="">Select Scout</option>
+                    <option value="">Entire Organization</option>
                     {scouts.map(scout => (
                       <option key={scout.id} value={scout.id}>
                         {scout.name}
@@ -218,12 +228,12 @@ const TaskForm = ({ task, status, scouts, onClose, onSubmit }) => {
               <div className="summary-box">
                 <div className="summary-row">
                   <span className="summary-label">TASK ID:</span>
-                  <span className="summary-value">{task ? `#${task.id}` : 'NEW'}</span>
+                  <span className="summary-value">{task ? `#${task.id.substring(0, 8)}` : 'NEW'}</span>
                 </div>
                 <div className="summary-row">
                   <span className="summary-label">CREATED DATE:</span>
                   <span className="summary-value">
-                    {task ? formatDate(task.created_date) : getCurrentDate()}
+                    {task ? formatDate(task.created_at) : getCurrentDate()}
                   </span>
                 </div>
                 <div className="summary-divider"></div>
@@ -237,7 +247,7 @@ const TaskForm = ({ task, status, scouts, onClose, onSubmit }) => {
                       <circle cx="12" cy="7" r="4"/>
                     </svg>
                     <div>
-                      <div className="summary-item-label">Assigned Scout</div>
+                      <div className="summary-item-label">Assigned To</div>
                       <div className="summary-item-value">
                         {getAssignedScoutName()}
                       </div>

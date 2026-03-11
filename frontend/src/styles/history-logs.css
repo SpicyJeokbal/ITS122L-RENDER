@@ -1,0 +1,288 @@
+/* =================== HISTORY & LOGS =================== */
+
+/* History List */
+.history-list {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.history-card {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #2c5f2d;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.history-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.history-date {
+  font-size: 13px;
+  color: #999;
+}
+
+.action-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 0.3px;
+}
+
+.action-created {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.action-updated {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.action-deleted {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.action-status {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.history-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.history-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+.history-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Logs List */
+.logs-list {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.log-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  transition: all 0.2s;
+}
+
+.log-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.log-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.log-content {
+  flex: 1;
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.log-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.log-login {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.log-logout {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.log-create {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.log-update {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.log-delete {
+  background: #ffebee;
+  color: #e74c3c;
+}
+
+.log-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.log-description {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.log-meta {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* Logs Table Badges */
+.log-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 0.3px;
+}
+
+.log-login {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.log-logout {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.log-create {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.log-update {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.log-delete {
+  background: #ffebee;
+  color: #e74c3c;
+}
+
+/* Enhanced Logs Filters */
+.logs-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 20px;
+  margin: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-group label svg {
+  flex-shrink: 0;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-ongoing {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-done {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-cancelled {
+  background: #ffebee;
+  color: #c62828;
+}
+
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .logs-filters {
+    grid-template-columns: 1fr;
+  }
+}

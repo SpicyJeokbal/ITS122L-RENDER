@@ -1,7 +1,9 @@
 // frontend/src/components/TaskCard.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
-const TaskCard = ({ task, onDragStart, onClick }) => {
+const TaskCard = ({ task, onDragStart, onClick, onDelete, onArchive }) => {
+  const [showMenu, setShowMenu] = useState(false);
+
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -16,6 +18,49 @@ const TaskCard = ({ task, onDragStart, onClick }) => {
     return `card-priority priority-${priority}`;
   };
 
+  const handleDownloadPDF = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/tasks/${task.id}/pdf`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `task-${task.title.replace(/\s+/g, '-')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        alert('Error downloading PDF');
+      }
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      alert('Error downloading PDF');
+    }
+    setShowMenu(false);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      onDelete(task.id);
+    }
+    setShowMenu(false);
+  };
+
+  const handleArchive = () => {
+    if (window.confirm('Archive this task?')) {
+      onArchive(task.id);
+    }
+    setShowMenu(false);
+  };
+
   return (
     <div 
       className={`card ${task.status === 'cancelled' ? 'card-cancelled' : ''}`}
@@ -25,12 +70,50 @@ const TaskCard = ({ task, onDragStart, onClick }) => {
     >
       <div className="card-header">
         <div className="card-title">{task.title}</div>
-        <div className="card-menu">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <circle cx="3" cy="8" r="1.5"/>
-            <circle cx="8" cy="8" r="1.5"/>
-            <circle cx="13" cy="8" r="1.5"/>
-          </svg>
+        <div className="card-menu-container">
+          <button 
+            className="card-menu-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMenu(!showMenu);
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <circle cx="3" cy="8" r="1.5"/>
+              <circle cx="8" cy="8" r="1.5"/>
+              <circle cx="13" cy="8" r="1.5"/>
+            </svg>
+          </button>
+
+          {showMenu && (
+            <div className="card-dropdown">
+              <button className="card-dropdown-item" onClick={handleDownloadPDF}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download PDF
+              </button>
+              <button className="card-dropdown-item" onClick={handleArchive}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="21 8 21 21 3 21 3 8"/>
+                  <rect x="1" y="3" width="22" height="5"/>
+                  <line x1="10" y1="12" x2="14" y2="12"/>
+                </svg>
+                Archive
+              </button>
+              <button className="card-dropdown-item card-dropdown-delete" onClick={handleDelete}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
       
@@ -93,6 +176,17 @@ const TaskCard = ({ task, onDragStart, onClick }) => {
           </div>
         )}
       </div>
+
+      {/* Overlay to close menu when clicking outside */}
+      {showMenu && (
+        <div 
+          className="card-menu-overlay" 
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowMenu(false);
+          }}
+        />
+      )}
     </div>
   );
 };

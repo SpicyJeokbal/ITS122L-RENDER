@@ -9,6 +9,8 @@ import Workspace from './pages/Workspace';
 import Scouts from './pages/Scouts'; 
 import Archive from './pages/Archive';
 import AdminManagement from './pages/AdminManagement';
+import History from './pages/History';
+import Logs from './pages/Logs';
 import './index.css';
 
 // Protected Route Component
@@ -100,12 +102,30 @@ function App() {
           } 
         />
         
-        {/* Super Admin Only Route */}
+        {/* Super Admin Only Routes */}
         <Route 
           path="/admin" 
           element={
             <SuperAdminRoute>
               <AdminManagement />
+            </SuperAdminRoute>
+          } 
+        />
+
+        <Route 
+          path="/history" 
+          element={
+            <SuperAdminRoute>
+              <History />
+            </SuperAdminRoute>
+          } 
+        />
+
+        <Route 
+          path="/logs" 
+          element={
+            <SuperAdminRoute>
+              <Logs />
             </SuperAdminRoute>
           } 
         />

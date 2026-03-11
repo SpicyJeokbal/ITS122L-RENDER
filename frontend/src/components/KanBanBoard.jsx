@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import TaskCard from './TaskCard';
 
-const KanbanBoard = ({ tasks, onAddTask, onTaskClick, onStatusChange }) => {
+const KanbanBoard = ({ tasks, onAddTask, onTaskClick, onStatusChange, onDelete, onArchive }) => {
   const [draggedTask, setDraggedTask] = useState(null);
 
   const handleDragStart = (e, task) => {
@@ -71,6 +71,8 @@ const KanbanBoard = ({ tasks, onAddTask, onTaskClick, onStatusChange }) => {
                 task={task}
                 onDragStart={handleDragStart}
                 onClick={() => onTaskClick(task)}
+                onDelete={onDelete}
+                onArchive={onArchive}
               />
             ))}
           </div>

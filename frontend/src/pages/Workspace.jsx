@@ -34,7 +34,7 @@ const Workspace = () => {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/tasks', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -58,7 +58,7 @@ const Workspace = () => {
   const fetchScouts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/users/scouts', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/scouts`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -94,7 +94,7 @@ const Workspace = () => {
       const token = localStorage.getItem('token');
       const url = selectedTask 
         ? `${process.env.REACT_APP_API_URL}/api/tasks/${selectedTask.id}`
-        : '${process.env.REACT_APP_API_URL}/api/tasks';
+        : `${process.env.REACT_APP_API_URL}/api/tasks`;
       
       const method = selectedTask ? 'PUT' : 'POST';
       
@@ -125,7 +125,7 @@ const Workspace = () => {
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/tasks/update-status', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/update-status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

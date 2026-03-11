@@ -14,7 +14,7 @@ const Archive = () => {
   const fetchArchivedTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/archive', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/archive`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

@@ -31,7 +31,7 @@ const AdminManagement = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/admin/users', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -68,7 +68,7 @@ const AdminManagement = () => {
       const token = localStorage.getItem('token');
       const url = selectedUser 
         ? `${process.env.REACT_APP_API_URL}/api/admin/users/${selectedUser.id}`
-        : '${process.env.REACT_APP_API_URL}/api/admin/users';
+        : `${process.env.REACT_APP_API_URL}/api/admin/users`;
       
       const method = selectedUser ? 'PUT' : 'POST';
       
